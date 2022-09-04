@@ -2,7 +2,7 @@
   "name": "schema-example-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@graphql-yoga/node": "^2.13.12",
-    "graphql": "^16.6.0"
+    "graphql": "^16.6.0",
+    "nexus": "^1.3.0"
   }
 }
