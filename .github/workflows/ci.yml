@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: ["master", "staging"]
+  pull_request:
+    branches: ["master", "staging"]
+
+env:
+  NODE_VERSION: 16
+  TZ: "Asia/Yekaterinburg"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set environment by branch if not staging or master
+        if: ${{ github.ref != 'refs/heads/staging' && github.ref != 'refs/heads/master' }}
+        run: |
+          echo "branch=staging" >> $GITHUB_ENV
+
+      - name: Set environment by branch 
+        if: ${{ github.ref == 'refs/heads/staging' || github.ref  == 'refs/heads/master' }}
+        run: |
+          echo "branch=$GITHUB_REF_NAME" >> $GITHUB_ENV
+
+      - name: Show envs
+        run: |
+          echo "Branch env: ${{ env.branch }}"
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Cache dependencies
+        id: npmcache
+        uses: actions/cache@v2
+        with:
+          path: node_modules/
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.npmcache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Make schema file
+        run: |
+          npm run schema:make
+
+      - name: Upload schema to storage
+        env:
+          BRANCH: ${{ env.branch }}
+        run: |
+          npm run schema:upload
+
+
+
