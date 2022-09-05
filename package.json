@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "schema:make": "node ./makeSchema.js", 
+    "schema:make": "node ./makeSchema.js",
+    "schema:upload": "node ./uploadSchema.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
@@ -13,7 +14,11 @@
   "license": "ISC",
   "dependencies": {
     "@graphql-yoga/node": "^2.13.12",
+    "dotenv": "^16.0.2",
     "graphql": "^16.6.0",
     "nexus": "^1.3.0"
+  },
+  "devDependencies": {
+    "firebase": "^9.9.4"
   }
 }
